@@ -31,8 +31,6 @@ sub parser($doc) {
     $doc.lookfor(:TAG<img>).race.map(&src-extractor);
 }
 
-As you can see, it's quite easy to scrap some site data: 
-
 # Just as pure example.
 scrap("konachan.net/post", &parser);
 ```
