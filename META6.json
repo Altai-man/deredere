@@ -3,7 +3,7 @@
     "name" : "deredere",
     "version" : "0.1.0",
     "author" : "github:Altai-man",
-    "description" : "Simple scrapping framework",
+    "description" : "Simple scraping framework",
     "depends" : [ "HTTP::UserAgent", "Gumbo" ],
     "provides" : {
         "deredere" : "lib/deredere.pm6"
