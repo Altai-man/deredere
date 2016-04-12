@@ -31,10 +31,10 @@ sub parser($doc) {
     $doc.lookfor(:TAG<img>).race.map(&src-extractor);
 }
 
-As you can see, it's quite easy to scrap some site data: 
+As you can see, it's quite easy to scrape some site data:
 
 # Just as pure example.
-scrap("konachan.net/post", &parser);
+scrape("konachan.net/post", &parser);
 ```
 
 See other examples for more info.
@@ -42,9 +42,9 @@ See other examples for more info.
 ## Scrapers
 
 ```Perl6
-sub scrap(Str $url);
-sub scrap(Str $url, &parser, Str :$filename="scraped-data.txt");
-sub scrap(Str $url, &parser, &next, &operator, Int $gens=1);
+sub scrape(Str $url);
+sub scrape(Str $url, &parser, Str :$filename="scraped-data.txt");
+sub scrape(Str $url, &parser, &next, &operator, Int $gens=1);
 ```
 
 

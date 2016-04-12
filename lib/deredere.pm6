@@ -6,18 +6,18 @@ use Gumbo;
 unit module deredere;
 
 # Scraper instances.
-multi sub scrap(Str $url) is export {
+multi sub scrape(Str $url) is export {
     default-save-operator(get-page($url), $url);
 }
 
-multi sub scrap(Str $url, &parser, Str :$filename="scraped-data.txt") is export {
+multi sub scrape(Str $url, &parser, Str :$filename="scraped-data.txt") is export {
     my $page = get-page($url);
     my $xml = parse-html($page.content);
     my @data = &parser($xml);
     default-save-operator(@data, $filename);
 }
 
-multi sub scrap(Str $u, &parser, &next, &operator, Int $gens=1) is export {
+multi sub scrape(Str $u, &parser, &next, &operator, Int $gens=1) is export {
     my $page;
     my $xml;
     my $url = $u;
