@@ -17,7 +17,7 @@ multi sub scrape(Str $url, &parser, Str :$filename="scraped-data.txt") is export
     default-save-operator(@data, $filename);
 }
 
-multi sub scrape(Str $u, &parser, &next, &operator, Int $gens=1) is export {
+multi sub scrape(Str $u, &parser, &operator, &next=&default-next, Int $gens=1) is export {
     my $page;
     my $xml;
     my $url = $u;
@@ -56,7 +56,7 @@ multi sub default-save-operator(@data, Str $filename) {
 		      }});
     if @data-pull.defined {
 	my $fh = open $filename, :a;
-	for @pull {
+	for @data-pull {
 	    $fh.say($_);
 	}
 	$fh.close;
@@ -68,4 +68,12 @@ our sub get-page(Str $url, Int $timeout=10) {
     my $ua = HTTP::UserAgent.new(:useragent<chrome_linux>);
     $ua.timeout = $timeout;
     $ua.get($url);
+}
+
+our sub default-next($xml) {
+    # If we are using default "next" operator,
+    # it means that the caller wants to scrape only first "generation".
+    # Because of that, we just assign empty line to url,
+    # since it won't be used in the cycle.
+    "";
 }
