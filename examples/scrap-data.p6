@@ -21,4 +21,4 @@ sub operator(@pull) {
     $fh.close;
 };
 
-scrap("github.com/supernovus/exemel/commits/master", &parser, &next, &operator, 2);
+scrape("github.com/supernovus/exemel/commits/master", &parser, &operator, &next, 2);

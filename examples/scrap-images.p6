@@ -12,4 +12,4 @@ sub parser($doc) {
     $doc.lookfor(:TAG<img>).race.map(&src-extractor);
 }
 
-scrap("konachan.net/post", &parser);
+scrape("konachan.net/post", &parser);
