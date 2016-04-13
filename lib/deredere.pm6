@@ -17,11 +17,12 @@ multi sub scrape(Str $url, &parser, Str :$filename="scraped-data.txt") is export
     default-save-operator(@data, $filename);
 }
 
-multi sub scrape(Str $u, &parser, &operator, &next=&default-next, Int $gens=1) is export {
+multi sub scrape(Str $u, &parser, &operator, &next=&default-next, Int $gens=1, Int $delay=0) is export {
     my $page;
     my $xml;
     my $url = $u;
     for (1 .. $gens) {
+	sleep $delay;
 	$page = get-page($url);
 	$xml = parse-html($page.content);
 	&operator(&parser($xml));

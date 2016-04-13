@@ -43,7 +43,7 @@ See other examples for more info.
 sub scrape(Str $url);
 sub scrape(Str $url, &parser, Str :$filename="scraped-data.txt");
 # "Next" function has a default value of empty line function, in the case if we scrape the first page only.
-sub scrape(Str $url, &parser, &operator, &next?, Int $gens=1);
+sub scrape(Str $url, &parser, &operator, &next?, Int $gens=1, Int $delay=0);
 ```
 
 
@@ -68,4 +68,3 @@ Tests are coming.
 - More cases.
 - More operators.
 - Speed up.
-- Ability to delay requests.
