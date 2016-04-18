@@ -8,6 +8,11 @@ unit module deredere;
 # Scraper instances.
 multi sub scrape(Str $url) is export {
     default-save-operator(get-page($url), $url);
+    CATCH {
+	default {
+	    note "For $url: ", .message;
+	}
+    }
 }
 
 multi sub scrape(Str $url, &parser, Str :$filename="scraped-data.txt") is export {
@@ -15,6 +20,11 @@ multi sub scrape(Str $url, &parser, Str :$filename="scraped-data.txt") is export
     my $xml = parse-html($page.content);
     my @data = &parser($xml);
     default-save-operator(@data, $filename);
+    CATCH {
+	default {
+	    note "For $url: ", .message;
+	}
+    }
 }
 
 multi sub scrape(Str $u, &parser, &operator, &next=&default-next, Int $gens=1, Int $delay=0) is export {
@@ -24,6 +34,13 @@ multi sub scrape(Str $u, &parser, &operator, &next=&default-next, Int $gens=1, I
     for (1 .. $gens) {
 	sleep $delay;
 	$page = get-page($url);
+	CATCH {
+	    default {
+		note "For $url: ", .message;
+		note "Iteration is broken now. Bye.";
+		note "Last url was: ", $url
+	    }
+	}
 	$xml = parse-html($page.content);
 	&operator(&parser($xml));
 	$url = &next($xml);
@@ -43,6 +60,7 @@ multi sub default-save-operator($res, $url) {
     } else {
 	spurt $name, $res.content;
     }
+    note "$url is OK.";
 }
 
 multi sub default-save-operator(@data, Str $filename) {
@@ -52,6 +70,12 @@ multi sub default-save-operator(@data, Str $filename) {
     # and many variants is still needed to decide is we really need .race here.
     @data.race.map( { if $_.starts-with("http://") {
 			    default-save-operator(get-page($_), $_);
+			    CATCH {
+				default {
+				    note "For $_: ", .message;
+				    .resume;
+				}
+			    }
 			} else {
 			  @data-pull.append($_);
 		      }});
@@ -68,7 +92,11 @@ multi sub default-save-operator(@data, Str $filename) {
 our sub get-page(Str $url, Int $timeout=10) {
     my $ua = HTTP::UserAgent.new(:useragent<chrome_linux>);
     $ua.timeout = $timeout;
-    $ua.get($url);
+    my $res = $ua.get($url);
+    if !$res.is-success {
+	warn $res.status-line;
+    }
+    $res;
 }
 
 our sub default-next($xml) {
