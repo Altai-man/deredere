@@ -68,7 +68,7 @@ multi sub default-save-operator(@data, Str $filename) {
     # .race here is optional. I gained a small speed improvement by this
     # even on small(10-20 links) pulls, but testing with a wide bandwith
     # and many variants is still needed to decide is we really need .race here.
-    @data.race.map( { if $_.starts-with("http://") {
+    @data.race.map( { if $_ ~~ /https?\:\/\// {
 			    default-save-operator(get-page($_), $_);
 			    CATCH {
 				default {
