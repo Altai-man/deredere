@@ -4,7 +4,7 @@
     "license" : "Artistic-2.0",
     "tags": ["Web"],
     "version" : "0.1.0",
-    "author" : "github:Altai-man",
+    "auth" : "zef:Altai-man",
     "description" : "Simple scraping framework",
     "depends" : [ "HTTP::UserAgent", "Gumbo" ],
     "provides" : {
